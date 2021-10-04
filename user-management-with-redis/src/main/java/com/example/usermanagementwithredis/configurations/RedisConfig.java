@@ -13,7 +13,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 public class RedisConfig {
 
     /*
-     * We don't need to set all of these cproperties,
+     * We don't need to set all of these properties,
      * by default, redis will get them from application.yml
      */
 
