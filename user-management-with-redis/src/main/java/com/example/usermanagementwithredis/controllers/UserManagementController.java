@@ -33,7 +33,7 @@ public class UserManagementController {
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.login(loginRequest);
         ResponseEntity<LoginResponse> response = null;
         if(loginResponse != null) {
