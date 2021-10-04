@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -76,7 +77,7 @@ public class UserManagementController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
         ResponseEntity<UserResponse> response = null;
         try {
             if(userService.isEmailAvailable(userRequest.getEmail())) {
@@ -100,7 +101,7 @@ public class UserManagementController {
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("isAuthenticated and hasAuthority('Administrator') or isAuthenticated() and principal.id == #id")
-    public ResponseEntity<UserResponse> editUser(@PathVariable("id") Long id, @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> editUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest userRequest) {
         ResponseEntity<UserResponse> response = null;
         try {
             boolean wannaCreateAdminUser = userService.createUserRequestHasAdminRole(userRequest);
