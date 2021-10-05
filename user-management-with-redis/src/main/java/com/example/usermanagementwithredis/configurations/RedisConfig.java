@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 @Configuration
-@EnableRedisRepositories
+@EnableRedisRepositories("com.example.usermanagementwithredis.repositories")
 public class RedisConfig {
 
     /*
