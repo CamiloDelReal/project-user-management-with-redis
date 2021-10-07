@@ -10,5 +10,4 @@ Web service to manage users with CRUD and authentication operations, using Sprin
   * Redis template
   * Redis entities
   * Redis repositories
-- Postman queries
 - Docker compose script config for requirements
