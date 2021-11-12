@@ -120,7 +120,7 @@ public class UserService implements UserDetailsService {
         User user = mapper.map(userRequest, User.class);
         user.setProtectedPassword(passwordEncoder.encode(userRequest.getPassword()));
         if(userRequest.getRoles() == null || userRequest.getRoles().isEmpty()) {
-            Role guestRole = roleRepository.findByName("Guest").orElse(null);
+            Role guestRole = roleRepository.findByName(Role.GUEST).orElse(null);
             user.setRoles(Set.of(guestRole));
         } else {
             Set<Role> roles = userRequest.getRoles().stream().map(it -> roleRepository.findById(it.getId()).orElse(null)).filter(Objects::nonNull).collect(Collectors.toSet());
@@ -132,12 +132,12 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean createUserRequestHasAdminRole(UserRequest userRequest) {
-        Role adminRole = roleRepository.findByName("Administrator").orElse(null);
+        Role adminRole = roleRepository.findByName(Role.ADMINISTRATOR).orElse(null);
         return userRequest.getRoles() != null && userRequest.getRoles().stream().anyMatch(it -> Objects.equals(it.getId(), adminRole.getId()));
     }
 
     public boolean createUserRequestHasAdminRole(User user) {
-        Role adminRole = roleRepository.findByName("Administrator").orElse(null);
+        Role adminRole = roleRepository.findByName(Role.ADMINISTRATOR).orElse(null);
         return user.getRoles() != null && user.getRoles().stream().anyMatch(it -> Objects.equals(it.getId(), adminRole.getId()));
     }
 
@@ -158,10 +158,15 @@ public class UserService implements UserDetailsService {
             user.setLastName(userRequest.getLastName());
             user.setEmail(userRequest.getEmail());
             user.setProtectedPassword(passwordEncoder.encode(userRequest.getPassword()));
+            Set<Role> roles = null;
             if(userRequest.getRoles() != null && !userRequest.getRoles().isEmpty()) {
-                Set<Role> roles = userRequest.getRoles().stream().map(it -> roleRepository.findById(it.getId()).orElse(null)).filter(Objects::nonNull).collect(Collectors.toSet());
-                user.setRoles(roles);
+                roles = userRequest.getRoles().stream().map(it -> roleRepository.findById(it.getId()).orElse(null)).filter(Objects::nonNull).collect(Collectors.toSet());
             }
+            if(userRequest.getRoles() == null || (roles != null && roles.isEmpty())) {
+                Role guestRole = roleRepository.findByName(Role.GUEST).orElse(null);
+                roles = Set.of(guestRole);
+            }
+            user.setRoles(roles);
             userRepository.save(user);
             response = mapper.map(user, UserResponse.class);
         }

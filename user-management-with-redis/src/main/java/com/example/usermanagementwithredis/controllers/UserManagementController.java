@@ -1,10 +1,8 @@
 package com.example.usermanagementwithredis.controllers;
 
-import com.example.usermanagementwithredis.dtos.LoginRequest;
-import com.example.usermanagementwithredis.dtos.LoginResponse;
-import com.example.usermanagementwithredis.dtos.UserRequest;
-import com.example.usermanagementwithredis.dtos.UserResponse;
+import com.example.usermanagementwithredis.dtos.*;
 import com.example.usermanagementwithredis.entities.User;
+import com.example.usermanagementwithredis.services.RoleService;
 import com.example.usermanagementwithredis.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +24,12 @@ public class UserManagementController {
 
     private final Logger logger = LoggerFactory.getLogger(UserManagementController.class);
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public UserManagementController(@Lazy UserService userService) {
+    public UserManagementController(@Lazy UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -72,6 +72,18 @@ public class UserManagementController {
         } catch (Exception ex) {
             logger.error("Exception captured", ex);
             response = ResponseEntity.internalServerError().build();
+        }
+        return response;
+    }
+
+    @GetMapping(path = "/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RoleResponse>> getAllRoles() {
+        ResponseEntity<List<RoleResponse>> response = null;
+        try {
+            List<RoleResponse> roles = roleService.getAll();
+            response = new ResponseEntity<>(roles, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }

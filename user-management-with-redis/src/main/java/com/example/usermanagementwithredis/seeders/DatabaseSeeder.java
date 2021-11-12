@@ -34,17 +34,17 @@ public class DatabaseSeeder {
 
     private void seedRoles() {
         if(roleRepository.count() == 0) {
-            Role role = new Role("Administrator");
+            Role role = new Role(Role.ADMINISTRATOR);
             roleRepository.save(role);
 
-            role = new Role("Guest");
+            role = new Role(Role.GUEST);
             roleRepository.save(role);
         }
     }
 
     private void seedUsers() {
         if(userRepository.count() == 0) {
-            Role admin = roleRepository.findByName("Administrator").orElse(null);
+            Role admin = roleRepository.findByName(Role.ADMINISTRATOR).orElse(null);
             User user = new User("Root", "Admin", "root@gmail.com", passwordEncoder.encode("root"), Set.of(admin));
             userRepository.save(user);
         }

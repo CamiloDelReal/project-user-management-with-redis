@@ -12,6 +12,9 @@ import org.springframework.data.redis.core.index.Indexed;
 @ToString
 @RedisHash("roles")
 public class Role {
+    public static final String ADMINISTRATOR = "Administrator";
+    public static final String GUEST = "Guest";
+
     @Id
     @Indexed
     private Long id;
