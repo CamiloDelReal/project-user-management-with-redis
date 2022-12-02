@@ -12,3 +12,5 @@ Web service to manage users with CRUD and authentication operations, using Sprin
   * Redis repositories
 - Postman queries
 - Docker compose script config for requirements
+- Tests
+  * Integration tests using TestRestTemplate for client side and MockMvc for server side
